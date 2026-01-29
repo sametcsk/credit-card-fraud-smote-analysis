@@ -1,6 +1,6 @@
 # 💳 Kredi Kartı Dolandırıcılığı Tespiti: Pipeline & Imbalanced Learning
 
-[![Open In nbviewer](https://img.shields.io/badge/render-nbviewer-orange.svg)](https://nbviewer.org/github/sametcsk/credit-card-fraud-smote-analysis/blob/main/kredi_kart.ipynb)
+[![Open In nbviewer](https://nbviewer.org/github/sametcsk/credit-card-fraud-smote-analysis/blob/main/kredi_kart.ipynb)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![Library](https://img.shields.io/badge/Library-Scikit--Learn%20%7C%20Imbalanced--Learn-green)](https://imbalanced-learn.org/)
 
@@ -58,4 +58,5 @@ cd credit-card-fraud-smote-analysis
 pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn
 
 # Notebook'u başlatın
+
 jupyter notebook kredi_kart.ipynb
