@@ -1,62 +1,57 @@
-# 💳 Kredi Kartı Dolandırıcılığı Tespiti: Pipeline & Imbalanced Learning
+# Credit Card Fraud Detection with SMOTE
+# SMOTE ile Kredi Kartı Dolandırıcılık Tespiti
 
-[Open the notebook on nbviewer](https://nbviewer.org/github/sametcsk/credit-card-fraud-smote-analysis/blob/main/credit-card-fraud-analysis.ipynb)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
-[![Library](https://img.shields.io/badge/Library-Scikit--Learn%20%7C%20Imbalanced--Learn-green)](https://imbalanced-learn.org/)
+A machine learning project focusing on detecting fraudulent credit card transactions by addressing extreme class imbalance using Synthetic Minority Over-sampling Technique (SMOTE).
 
-> **⚠️ Önemli Not:** GitHub, büyük Jupyter Notebook dosyalarını (.ipynb) render ederken bazen hata verebilir. Projenin kodlarını, grafiklerini ve analizlerini eksiksiz görüntülemek için lütfen yukarıdaki **"Open In nbviewer"** rozetine tıklayın.
+Sentetik Azınlık Aşırı Örnekleme Tekniği (SMOTE) kullanarak aşırı sınıf dengesizliğini ele alan ve kredi kartı dolandırıcılık işlemlerini tespit etmeye odaklanan makine öğrenmesi projesi.
 
-## 🎯 Proje Hakkında
-Finansal veri setlerinde karşılaşılan en büyük zorluk **Sınıf Dengesizliğidir (Class Imbalance)**. Bu projede kullanılan Avrupa kredi kartı veri setinde, 284.807 işlemden sadece **492'si (%0.17)** dolandırıcılık içermektedir.
+> **Task / Görev:** Binary Classification / İkili Sınıflandırma · **Domain / Alan:** Finance & Cybersecurity / Finans & Siber Güvenlik
 
-Böyle bir veri setinde standart bir model "Her işlem güvenlidir" tahmini yapsa bile **%99.8 Accuracy (Doğruluk)** skoruna ulaşır, ancak banka milyonlarca dolar kaybeder. Bu proje, bu "Accuracy Tuzağına" düşmeden, dolandırıcıları yakalamak için **Veri Sızıntısını (Data Leakage)** önleyen özel bir Pipeline mimarisi sunmaktadır.
+---
 
-## 🛠️ Teknik Mimari ve Yaklaşım
+## Project Structure / Proje Yapısı
 
-Projede "Data Leakage" problemini çözmek için **SMOTE** işlemi, veriyi ayırmadan önce değil, **Cross-Validation döngüsü içinde** uygulanmıştır.
+```text
+credit-card-fraud-smote-analysis/
+├── notebooks/
+│   └── credit-card-fraud-analysis.ipynb   # Exploratory analysis, SMOTE application, and modeling
+├── data/
+│   └── (Dataset files should be placed here)
+├── src/
+│   └── __init__.py          # Placeholder for future modularization
+├── requirements.txt
+└── .gitignore
+└── README.md
+```
 
-### 1. Veri Ön İşleme (Preprocessing)
-* **Log Transformation:** `Amount` (Tutar) değişkeni aşırı çarpık (skewed) olduğu için Log dönüşümü ile normalize edildi.
-* **Robust Scaler:** Dolandırıcılık işlemleri genelde aykırı değer (Outlier) içerdiği için, ortalama yerine medyanı kullanan RobustScaler tercih edildi.
-* **Time Engineering:** Saniye cinsinden olan zaman verisi, dolandırıcıların aktivite saatlerini yakalamak için **Saat (Hour)** bilgisine dönüştürüldü.
-
-### 2. Yarıştırılan Stratejiler
-Aşağıdaki 4 farklı strateji **Random Forest** algoritması üzerinde test edilmiştir:
-1.  **Baseline:** Hiçbir örnekleme yapılmadı (Referans modeli).
-2.  **Class Weights:** Algoritmaya "azınlık sınıfına hata yaparsan daha fazla ceza kes" talimatı verildi.
-3.  **SMOTE (Synthetic Minority Oversampling Technique):** Eğitim setinde sentetik dolandırıcı verileri üretildi.
-4.  **SMOTE + Tomek Links:** Sentetik üretim sonrası, sınıflar arası sınır ihlali yapan gürültülü veriler temizlendi.
-
-## 📊 Sonuçlar ve Performans
-
-Dengesiz verilerde en güvenilir metrik olan **Precision-Recall Curve (AUPRC)** kullanılmıştır.
-
-
-| Model | Recall (Yakalama Oranı) | Precision (Kesinlik) | F1-Score | PR AUC (Genel Başarı) |
-|-------|-------------------------|----------------------|----------|-----------------------|
-| **SMOTE (RF)** | **0.82** | 0.89 | 0.85 | **0.816** |
-| SMOTE + Tomek | 0.82 | 0.89 | 0.85 | 0.816 |
-| Class Weights | 0.75 | **0.94** | 0.83 | 0.811 |
-| Baseline | 0.78 | 0.93 | 0.85 | 0.806 |
-
-### 💡 İş Analizi (Business Insight)
-* **Baseline Model:** Recall %78 seviyesinde kalırken, **SMOTE** entegreli model bunu **%82'ye** çıkarmıştır.
-* **Kritik Karar:** SMOTE kullanımı, bankanın yakaladığı dolandırıcı sayısını artırırken, yanlış alarm (False Positive) oranını kabul edilebilir seviyede tutmuştur. Finansal risk yönetimi açısından **SMOTE Pipeline** en verimli çözümdür.
-
-## 💻 Kurulum
-
-Projeyi kendi bilgisayarınızda çalıştırmak için:
+## Quick Start / Hızlı Başlangıç
 
 ```bash
-# Repoyu klonlayın
 git clone https://github.com/sametcsk/credit-card-fraud-smote-analysis.git
-
-# Klasöre gidin
 cd credit-card-fraud-smote-analysis
+python -m venv .venv && .venv\Scripts\activate   # or source .venv/bin/activate
+pip install -r requirements.txt
 
-# Gerekli kütüphaneleri yükleyin
-pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn
+# Launch Jupyter Notebook / Jupyter Notebook'u başlatın
+jupyter notebook notebooks/credit-card-fraud-analysis.ipynb
+```
 
-# Notebook'u başlatın
+## Pipeline Overview / Pipeline Adımları
 
-jupyter notebook credit-card-fraud-analysis.ipynb
+1. **Data Preprocessing** — Handling anonymized PCA features and scaling `Time` and `Amount` variables.
+   *Veri Ön İşleme — Anonimleştirilmiş PCA özelliklerinin işlenmesi ve `Zaman` ile `Miktar` değişkenlerinin ölçeklenmesi.*
+2. **Imbalanced Class Handling** — Applying SMOTE to oversample the minority class (fraudulent transactions).
+   *Dengesiz Sınıf Yönetimi — Azınlık sınıfını (dolandırıcılık işlemleri) aşırı örneklemek için SMOTE uygulanması.*
+3. **Modeling** — Training classifiers (e.g., Logistic Regression, Random Forest) on both the original and SMOTE-augmented datasets.
+   *Modelleme — Hem orijinal hem de SMOTE ile artırılmış veri setlerinde sınıflandırıcıların (örn. Lojistik Regresyon, Random Forest) eğitilmesi.*
+4. **Evaluation** — Comparing models using Precision, Recall, F1-Score, and AUPRC (Area Under the Precision-Recall Curve) to highlight the impact of SMOTE.
+   *Değerlendirme — SMOTE'nin etkisini vurgulamak için Kesinlik, Duyarlılık, F1-Skoru ve AUPRC (Kesinlik-Duyarlılık Eğrisi Altındaki Alan) kullanılarak modellerin karşılaştırılması.*
+
+## Tech Stack / Kullanılan Teknolojiler
+
+`Python` · `Scikit-learn` · `Imbalanced-learn (SMOTE)` · `Pandas` · `NumPy` · `Matplotlib` · `Seaborn`
+
+## License / Lisans
+
+Educational purposes.
+Eğitim amaçlıdır.
